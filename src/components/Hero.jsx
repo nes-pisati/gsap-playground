@@ -1,11 +1,16 @@
 import { useGSAP } from '@gsap/react'
-import React from 'react'
+import React, { useRef } from 'react'
 import { SplitText } from 'gsap/all'
 import gsap from 'gsap'
+import { useMediaQuery } from 'react-responsive'
 
 const Hero = () => {
 
+    const videoRef = useRef();
+    const isMobile = useMediaQuery({ maxWidth: 767})
+
     useGSAP(() => {
+
         const heroSplit = new SplitText('.title', {type: 'chars, words'});
         const paragraphSplit = new SplitText('.subtitle', {type: 'lines'});
 
@@ -38,6 +43,25 @@ const Hero = () => {
         .to('.right-leaf', { y: 200 }, 0)
         .to('.left-leaf', { y: -200 }, 0)
 
+        const startValue = isMobile ? 'top 50%' : 'center 60%'; //la prima proprietà (top) si riferisce SEMPRE all'elemento che stiamo animando, la seconda proprietà (50%) si riferisce SEMPRE allo schermo. Quindi: quando il top del video raggiunge la metà dello schermo
+        const endValue = isMobile ? '120% top' : 'bottom top';
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: 'video',
+                start: startValue,
+                end: endValue,
+                scrub: true,
+                pin: true, //pinna il video sullo schermo, se scrollo il video non si muove
+            }
+        })
+
+        videoRef.current.onloadedmetadata = () => {
+            tl.to(videoRef.current, {
+                currentTime: videoRef.current.duration
+            })
+        }
+
     }, [])
 
     return (
@@ -61,6 +85,17 @@ const Hero = () => {
                     </div>
                 </div>
             </section>
+
+            <div className='videao absolute inset-0'> 
+                {/* la classe absolute serve quando non vogliamo che il div interagisca con gli altri elementi sullo schermo*/}
+                <video 
+                    ref={videoRef}
+                    src='/videos/output.mp4'
+                    muted
+                    playsInline //serve a nascondere gli elementi tipo play/pausa, regolazione volume...
+                    preload='auto' //carica automaticamente
+                />
+            </div>
         </>
     )
 }
