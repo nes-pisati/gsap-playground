@@ -321,7 +321,7 @@ body {
             @apply flex max-md:flex-col gap-10 md:items-center justify-between w-full lg:absolute bottom-0;
 
             .info {
-                @apply space-y-4 lg:translate-y-20;
+                @apply space-y-4 lg:translate-y-0 ps-20;
 
                 #title {
                     @apply font-modern-negra md:text-6xl text-3xl text-yellow max-w-40;
@@ -329,14 +329,14 @@ body {
             }
 
             .details {
-                @apply space-y-5 md:max-w-md text-left;
+                @apply space-y-5 md:max-w-md text-left mr-20;
 
                 h2 {
-                    @apply md:text-5xl text-3xl font-serif;
+                    @apply md:text-5xl text-xl font-serif;
                 }
 
                 p {
-                    @apply md:text-lg pe-5;
+                    @apply md:text-base pe-5;
                 }
             }
         }
